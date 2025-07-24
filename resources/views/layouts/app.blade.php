@@ -18,19 +18,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('tenants.index') }}">Tenants</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('rents.index') }}">Rents</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('settings.index') }}">Settings</a>
+                        <a class="nav-link" href="{{ route('bills.index') }}">Bills</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('bills.index') }}">Bills</a>
+                        <a class="nav-link" href="{{ route('settings.index') }}">Settings</a>
                     </li>
                 </ul>
             </div>
@@ -53,7 +50,7 @@
                 </ul>
             </div>
         @endif
-        
+
         @yield('content')
     </div>
 
