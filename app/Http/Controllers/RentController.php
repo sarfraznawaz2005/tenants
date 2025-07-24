@@ -6,6 +6,7 @@ use App\Models\Rent;
 use App\Models\Tenant;
 use App\Models\Bill;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class RentController extends Controller
 {
@@ -89,5 +90,25 @@ class RentController extends Controller
         $rentMonth = \Carbon\Carbon::parse($rent->date);
 
         return view('rents.invoice', compact('rent', 'rentMonth'));
+    }
+
+    public function saveInvoiceImage(Request $request, Rent $rent)
+    {
+        $request->validate([
+            'image' => 'required',
+        ]);
+
+        try {
+            $imageData = $request->input('image');
+            $imageData = str_replace('data:image/png;base64,', '', $imageData);
+            $imageData = str_replace(' ', '+', $imageData);
+            $imageName = 'invoice-' . $rent->id . '-' . time() . '.png';
+
+            Storage::disk('public')->put('invoices/' . $imageName, base64_decode($imageData));
+
+            return response()->json(['success' => true, 'imageUrl' => Storage::disk('public')->url('invoices/' . $imageName)]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }

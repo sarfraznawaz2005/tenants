@@ -13,6 +13,7 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::resource('tenants', TenantController::class);
 Route::resource('rents', RentController::class);
 Route::get('/rents/{rent}/invoice', [RentController::class, 'invoice'])->name('rents.invoice');
+Route::post('/rents/{rent}/save-invoice-image', [RentController::class, 'saveInvoiceImage']);
 Route::post('/rents/{rent}/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 

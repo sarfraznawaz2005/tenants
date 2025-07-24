@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Invoice for Rent #{{ $rent->id }}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -166,10 +167,36 @@
         </table>
     </div>
 
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script>
-        window.onload = function() {
-            window.print();
-        };
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded.');
+            const invoiceBox = document.querySelector('.invoice-box');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            document.getElementById('shareInvoice').addEventListener('click', function() {
+                console.log('Share Invoice button clicked.');
+                html2canvas(invoiceBox).then(function(canvas) {
+                    canvas.toBlob(function(blob) {
+                        const file = new File([blob], 'invoice-{{ $rent->id }}.png', { type: 'image/png' });
+                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                            navigator.share({
+                                files: [file],
+                                title: 'Invoice for Rent #{{ $rent->id }}',
+                                text: 'Here is your invoice for rent #{{ $rent->id }}.'
+                            }).catch((error) => console.error('Error sharing:', error));
+                        } else {
+                            alert('Web Share API is not supported in your browser or cannot share this file type.');
+                            console.warn('Web Share API not supported or cannot share this file type.');
+                        }
+                    }, 'image/png');
+                });
+            });
+        });
     </script>
+    <div style="text-align: center; margin-top: 20px;">
+        <button id="saveInvoice" style="padding: 10px 20px; margin-right: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer;">Save Invoice</button>
+        <button id="shareInvoice" style="padding: 10px 20px; background-color: #008CBA; color: white; border: none; cursor: pointer;">Share Invoice</button>
+    </div>
 </body>
 </html>

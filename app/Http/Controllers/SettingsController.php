@@ -21,9 +21,18 @@ class SettingsController extends Controller
 
     public function clean()
     {
-        DB::table('comments')->delete();
-        DB::table('rents')->delete();
-        DB::table('tenants')->delete();
+        DB::statement('PRAGMA foreign_keys = OFF');
+
+        DB::table('comments')->truncate();
+        DB::table('rents')->truncate();
+        DB::table('bills')->truncate();
+        DB::table('bill_types')->truncate();
+        DB::table('tenants')->truncate();
+        DB::table('users')->truncate();
+        DB::table('cache')->truncate();
+        DB::table('jobs')->truncate();
+
+        DB::statement('PRAGMA foreign_keys = ON');
 
         return redirect()->route('settings.index')->with('success', 'Database cleaned successfully.');
     }
