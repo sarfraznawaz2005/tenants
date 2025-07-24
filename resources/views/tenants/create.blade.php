@@ -26,7 +26,7 @@
         </div>
         <div class="mb-3">
             <label for="monthly_rent" class="form-label">Monthly Rent</label>
-            <input type="number" class="form-control" id="monthly_rent" name="monthly_rent" step="0.01" required>
+            <input type="number" class="form-control" id="monthly_rent" name="monthly_rent" required>
         </div>
         <button type="submit" class="btn btn-primary">Add Tenant</button>
     </form>

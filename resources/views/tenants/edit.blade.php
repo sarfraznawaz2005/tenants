@@ -27,7 +27,7 @@
         </div>
         <div class="mb-3">
             <label for="monthly_rent" class="form-label">Monthly Rent</label>
-            <input type="number" class="form-control" id="monthly_rent" name="monthly_rent" step="0.01" value="{{ $tenant->monthly_rent }}" required>
+            <input type="number" class="form-control" id="monthly_rent" name="monthly_rent" value="{{ $tenant->monthly_rent }}" required>
         </div>
         <button type="submit" class="btn btn-primary">Update Tenant</button>
     </form>

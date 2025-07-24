@@ -15,11 +15,11 @@
         </div>
         <div class="mb-3">
             <label for="amount_due" class="form-label">Amount Due</label>
-            <input type="number" class="form-control" id="amount_due" name="amount_due" step="0.01" readonly>
+            <input type="number" class="form-control" id="amount_due" name="amount_due" readonly>
         </div>
         <div class="mb-3">
             <label for="amount_received" class="form-label">Amount Received</label>
-            <input type="number" class="form-control" id="amount_received" name="amount_received" step="0.01" required>
+            <input type="number" class="form-control" id="amount_received" name="amount_received" required>
         </div>
         <div class="mb-3">
             <label for="date" class="form-label">Date</label>
