@@ -57,13 +57,21 @@
             Comments
         </div>
         <div class="card-body">
-            @foreach ($rent->comments as $comment)
-                <div class="mb-2">
-                    <p class="mb-0">{{ $comment->body }}</p>
-                    <small class="text-muted">Posted on {{ $comment->created_at->format('D d M y, h:i A') }}</small>
-                </div>
-                <hr>
-            @endforeach
+            <ul class="list-group mb-3">
+                @foreach ($rent->comments as $comment)
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-0">{{ $comment->body }}</p>
+                            <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                        </div>
+                        <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-link text-danger p-0"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </li>
+                @endforeach
+            </ul>
 
             <form action="{{ route('comments.store', $rent) }}" method="POST" class="mt-3">
                 @csrf
