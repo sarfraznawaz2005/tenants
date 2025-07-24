@@ -22,7 +22,7 @@
                     <td>{{ $tenant->phone }}</td>
                     <td>{{ $tenant->cnic }}</td>
                     <td>{{ $tenant->address }}</td>
-                    <td>{{ \Carbon\Carbon::parse($tenant->lease_date)->format('D d F Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($tenant->lease_date)->format('D d M y') }}</td>
                     <td>PKR {{ number_format($tenant->monthly_rent, 2) }}</td>
                     <td>
                         <a href="{{ route('tenants.edit', $tenant->id) }}" class="btn btn-sm btn-primary">Edit</a>

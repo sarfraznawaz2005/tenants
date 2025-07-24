@@ -17,7 +17,14 @@ class Rent extends Model
         'date',
         'status',
         'comment',
+        'bill_id',
+        'due_date',
     ];
+
+    public function bill()
+    {
+        return $this->belongsTo(Bill::class);
+    }
 
     public function comments()
     {

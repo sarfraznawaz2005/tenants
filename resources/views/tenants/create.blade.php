@@ -35,7 +35,7 @@
 @push('scripts')
     <script>
         flatpickr("#lease_date", {
-            dateFormat: "Y-m-d",
+            dateFormat: "D d M y",
         });
     </script>
 @endpush

@@ -14,6 +14,32 @@
             </select>
         </div>
         <div class="mb-3">
+            <label for="bill_id" class="form-label">Associated Bill (Optional)</label>
+            <select class="form-control" id="bill_id" name="bill_id">
+                <option value="">Select Bill</option>
+                @foreach ($bills as $bill)
+                    <option value="{{ $bill->id }}" data-picture="{{ $bill->picture ? asset('storage/' . $bill->picture) : '' }}">PKR {{ $bill->amount }} on {{ \Carbon\Carbon::parse($bill->date)->format('D d M y') }}</option>
+                @endforeach
+            </select>
+            <div id="bill-image-preview" class="mt-2" style="display: none;">
+                <img id="bill-image" src="" alt="Bill Image" style="max-width: 200px; cursor: pointer;">
+            </div>
+        </div>
+        <!-- Image Modal -->
+        <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="imageModalLabel">Bill Image</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img id="modal-image" src="" class="img-fluid" alt="Bill Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
             <label for="amount_due" class="form-label">Amount Due</label>
             <input type="number" class="form-control" id="amount_due" name="amount_due" readonly>
         </div>
@@ -24,6 +50,10 @@
         <div class="mb-3">
             <label for="date" class="form-label">Date</label>
             <input type="text" class="form-control" id="date" name="date" required>
+        </div>
+        <div class="mb-3">
+            <label for="due_date" class="form-label">Due Date</label>
+            <input type="text" class="form-control" id="due_date" name="due_date">
         </div>
         <div class="mb-3">
             <label class="form-label">Status</label>
@@ -50,6 +80,10 @@
             dateFormat: "Y-m-d",
         });
 
+        flatpickr("#due_date", {
+            dateFormat: "Y-m-d",
+        });
+
         $(document).ready(function() {
             $('#tenant_id').on('change', function() {
                 const rent = $(this).find(':selected').data('rent');
@@ -62,6 +96,22 @@
                 } else {
                     $('#comment-section').hide();
                 }
+            });
+
+            $('#bill_id').on('change', function() {
+                const picture = $(this).find(':selected').data('picture');
+                if (picture) {
+                    $('#bill-image').attr('src', picture);
+                    $('#bill-image-preview').show();
+                } else {
+                    $('#bill-image-preview').hide();
+                }
+            });
+
+            $('#bill-image').on('click', function() {
+                $('#modal-image').attr('src', $(this).attr('src'));
+                const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+                imageModal.show();
             });
         });
     </script>

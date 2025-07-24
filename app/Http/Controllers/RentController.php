@@ -4,20 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Rent;
 use App\Models\Tenant;
+use App\Models\Bill;
 use Illuminate\Http\Request;
 
 class RentController extends Controller
 {
     public function index()
     {
-        $rents = Rent::with('tenant')->get();
+        $rents = Rent::with('tenant')->orderBy('id', 'desc')->get();
         return view('rents.index', compact('rents'));
     }
 
     public function create()
     {
         $tenants = Tenant::all();
-        return view('rents.create', compact('tenants'));
+        $bills = Bill::orderBy('id', 'desc')->get();
+        return view('rents.create', compact('tenants', 'bills'));
     }
 
     public function store(Request $request)
@@ -29,6 +31,8 @@ class RentController extends Controller
             'date' => 'required|date',
             'status' => 'required|in:paid,not_paid',
             'comment' => 'nullable|string',
+            'bill_id' => 'nullable|exists:bills,id',
+            'due_date' => 'nullable|date',
         ]);
 
         $rent = new Rent($request->all());
@@ -47,7 +51,8 @@ class RentController extends Controller
     public function edit(Rent $rent)
     {
         $tenants = Tenant::all();
-        return view('rents.edit', compact('rent', 'tenants'));
+        $bills = Bill::orderBy('id', 'desc')->get();
+        return view('rents.edit', compact('rent', 'tenants', 'bills'));
     }
 
     public function update(Request $request, Rent $rent)
@@ -59,6 +64,8 @@ class RentController extends Controller
             'date' => 'required|date',
             'status' => 'required|in:paid,not_paid',
             'comment' => 'nullable|string',
+            'bill_id' => 'nullable|exists:bills,id',
+            'due_date' => 'nullable|date',
         ]);
 
         $rent->fill($request->all());
@@ -74,5 +81,13 @@ class RentController extends Controller
         $rent->delete();
 
         return redirect()->route('rents.index')->with('success', 'Rent and all associated comments deleted successfully.');
+    }
+
+    public function invoice(Rent $rent)
+    {
+        $rent->load('tenant', 'bill.billType');
+        $rentMonth = \Carbon\Carbon::parse($rent->date);
+
+        return view('rents.invoice', compact('rent', 'rentMonth'));
     }
 }
