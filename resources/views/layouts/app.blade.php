@@ -16,7 +16,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('tenants.index') }}">Tenants</a>
                     </li>
@@ -26,6 +26,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('bills.index') }}">Bills</a>
                     </li>
+                </ul>
+                <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('settings.index') }}">Settings</a>
                     </li>
