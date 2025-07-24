@@ -21,8 +21,9 @@ class SettingsController extends Controller
 
     public function clean()
     {
-        DB::table('tenants')->delete();
+        DB::table('comments')->delete();
         DB::table('rents')->delete();
+        DB::table('tenants')->delete();
 
         return redirect()->route('settings.index')->with('success', 'Database cleaned successfully.');
     }
