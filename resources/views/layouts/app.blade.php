@@ -18,7 +18,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{{ route('dashboard') }}">Rent Management</a>
+        <a class="navbar-brand {{ Request::routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">Rent Management</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,18 +26,18 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('tenants.index') }}">Tenants</a>
+                    <a class="nav-link {{ Request::routeIs('tenants.index') ? 'active' : '' }}" href="{{ route('tenants.index') }}">Tenants</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('rents.index') }}">Rents</a>
+                    <a class="nav-link {{ Request::routeIs('rents.index') ? 'active' : '' }}" href="{{ route('rents.index') }}">Rents</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('bills.index') }}">Bills</a>
+                    <a class="nav-link {{ Request::routeIs('bills.index') ? 'active' : '' }}" href="{{ route('bills.index') }}">Bills</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('settings.index') }}">Settings</a>
+                    <a class="nav-link {{ Request::routeIs('settings.index') ? 'active' : '' }}" href="{{ route('settings.index') }}">Settings</a>
                 </li>
             </ul>
         </div>
