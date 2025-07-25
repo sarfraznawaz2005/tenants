@@ -16,7 +16,7 @@
                 <th>Status</th>
                 <th>Comment</th>
                 <th>Associated Bill</th>
-                <th>Actions</th>
+                <th class="actions-column">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -37,7 +37,7 @@
                             N/A
                         @endif
                     </td>
-                    <td>
+                    <td class="actions-column">
                         <a href="{{ route('rents.show', $rent->id) }}" class="btn btn-sm btn-info">View</a>
                         <a href="{{ route('rents.edit', $rent->id) }}" class="btn btn-sm btn-primary">Edit</a>
                         <form action="{{ route('rents.destroy', $rent->id) }}" method="POST"

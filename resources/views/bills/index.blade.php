@@ -22,7 +22,7 @@
             <div class="card">
                 <div class="card-header">Bills</div>
                 <div class="card-body">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="billsTable">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -30,7 +30,7 @@
                                 <th>Date</th>
                                 <th>Amount</th>
                                 <th>Picture</th>
-                                <th>Actions</th>
+                                <th class="actions-column">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,7 +47,7 @@
                                             N/A
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="actions-column">
                                         <a href="{{ route('bills.edit', $bill->id) }}" class="btn btn-sm btn-primary">Edit</a>
                                         <form action="{{ route('bills.destroy', $bill->id) }}" method="POST" style="display:inline-block;">
                                             @csrf
@@ -71,12 +71,12 @@
             <div class="card">
                 <div class="card-header">Bill Types</div>
                 <div class="card-body">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="billTypesTable">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Actions</th>
+                                <th class="actions-column">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,7 +84,7 @@
                                 <tr>
                                     <td>{{ $billType->id }}</td>
                                     <td>{{ $billType->name }}</td>
-                                    <td>
+                                    <td class="actions-column">
                                         <a href="{{ route('bill-types.edit', $billType->id) }}" class="btn btn-sm btn-primary">Edit</a>
                                         <form action="{{ route('bill-types.destroy', $billType->id) }}" method="POST" style="display:inline-block;">
                                             @csrf
@@ -167,6 +167,11 @@
     <script>
         flatpickr("#date", {
             dateFormat: "Y-m-d",
+        });
+
+        $(document).ready(function() {
+            $('#billsTable').DataTable();
+            $('#billTypesTable').DataTable();
         });
     </script>
 @endpush

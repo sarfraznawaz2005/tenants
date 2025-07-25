@@ -14,7 +14,7 @@
                 <th>Address</th>
                 <th>Lease Date</th>
                 <th>Monthly Rent</th>
-                <th>Actions</th>
+                <th class="actions-column">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -26,7 +26,7 @@
                     <td>{{ $tenant->address }}</td>
                     <td>{{ \Carbon\Carbon::parse($tenant->lease_date)->format('D d M y') }}</td>
                     <td>PKR {{ number_format($tenant->monthly_rent, 2) }}</td>
-                    <td>
+                    <td class="actions-column">
                         <a href="{{ route('tenants.edit', $tenant->id) }}" class="btn btn-sm btn-primary">Edit</a>
                         <form action="{{ route('tenants.destroy', $tenant->id) }}" method="POST"
                               style="display: inline-block;">
