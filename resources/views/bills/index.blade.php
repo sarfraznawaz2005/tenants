@@ -112,26 +112,38 @@
                 <div class="modal-body">
                     <form action="{{ route('bills.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div class="form-group mb-3">
+                        <div class="mb-3">
                             <label for="bill_type_id">Bill Type</label>
-                            <select name="bill_type_id" id="bill_type_id" class="form-control" required>
+                            <select name="bill_type_id" id="bill_type_id" class="form-control @error('bill_type_id') is-invalid @enderror" required>
                                 <option value="">Select Bill Type</option>
                                 @foreach($billTypes as $billType)
-                                    <option value="{{ $billType->id }}">{{ $billType->name }}</option>
+                                    <option value="{{ $billType->id }}" {{ old('bill_type_id') == $billType->id ? 'selected' : '' }}>{{ $billType->name }}</option>
                                 @endforeach
                             </select>
+                            @error('bill_type_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="mb-3">
                             <label for="date">Date</label>
-                            <input type="text" name="date" id="date" class="form-control" required>
+                            <input type="text" name="date" id="date" class="form-control @error('date') is-invalid @enderror" value="{{ old('date') }}" required>
+                            @error('date')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="mb-3">
                             <label for="amount">Amount</label>
-                            <input type="number" name="amount" id="amount" class="form-control" required>
+                            <input type="number" name="amount" id="amount" class="form-control @error('amount') is-invalid @enderror" value="{{ old('amount') }}" required>
+                            @error('amount')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="mb-3">
                             <label for="picture">Bill Picture</label>
-                            <input type="file" name="picture" id="picture" class="form-control-file">
+                            <input type="file" name="picture" id="picture" class="form-control-file @error('picture') is-invalid @enderror">
+                            @error('picture')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <button type="submit" class="btn btn-primary">Add Bill</button>
                     </form>
@@ -151,9 +163,12 @@
                 <div class="modal-body">
                     <form action="{{ route('bills.storeType') }}" method="POST">
                         @csrf
-                        <div class="form-group mb-3">
+                        <div class="mb-3">
                             <label for="name">Bill Type Name</label>
-                            <input type="text" name="name" id="name" class="form-control" required>
+                            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <button type="submit" class="btn btn-primary">Add Bill Type</button>
                     </form>
