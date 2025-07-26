@@ -35,5 +35,10 @@ class Rent extends Model
     {
         return $this->belongsTo(Tenant::class);
     }
+
+    public function adjustments()
+    {
+        return $this->hasMany(Adjustment::class);
+    }
 }
 

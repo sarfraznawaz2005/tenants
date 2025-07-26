@@ -128,9 +128,40 @@
                 Rent for {{ $rentMonth->format('F Y') }}
             </td>
             <td>
-                PKR {{ number_format($rent->amount_remaining, 2) }}
+                PKR {{ number_format($rent->amount_due, 2) }}
             </td>
         </tr>
+
+        @php
+            $totalAmount = $rent->amount_due;
+        @endphp
+
+        @if ($rent->adjustments->count() > 0)
+            <tr class="heading">
+                <td>
+                    Adjustments
+                </td>
+                <td>
+                    Amount
+                </td>
+            </tr>
+            @foreach ($rent->adjustments as $adjustment)
+                <tr class="item">
+                    <td>
+                        {{ $adjustment->name }}
+                    </td>
+                    <td>
+                        @if ($adjustment->type === 'plus')
+                            + PKR {{ number_format($adjustment->amount, 2) }}
+                            @php $totalAmount += $adjustment->amount; @endphp
+                        @else
+                            - PKR {{ number_format($adjustment->amount, 2) }}
+                            @php $totalAmount -= $adjustment->amount; @endphp
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        @endif
 
         @if ($rent->bill)
             <tr class="item last">
@@ -161,8 +192,8 @@
         <tr class="total">
             <td></td>
             <td>
-                Total: PKR {{ number_format($rent->amount_remaining + ($rent->bill ? $rent->bill->amount : 0), 2) }}
-                </td>
+                Total: PKR {{ number_format($totalAmount + ($rent->bill ? $rent->bill->amount : 0), 2) }}
+            </td>
             </tr>
         </table>
     </div>

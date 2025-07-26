@@ -24,6 +24,7 @@ class SettingsController extends Controller
         DB::statement('PRAGMA foreign_keys = OFF');
 
         DB::table('comments')->truncate();
+        DB::table('adjustments')->truncate();
         DB::table('rents')->truncate();
         DB::table('bills')->truncate();
         DB::table('bill_types')->truncate();

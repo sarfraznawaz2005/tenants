@@ -18,6 +18,23 @@
         </div>
     </div>
 
+    @if ($rent->adjustments->count() > 0)
+        <div class="card mt-4">
+            <div class="card-header">
+                Adjustments
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    @foreach ($rent->adjustments as $adjustment)
+                        <li class="list-group-item">
+                            {{ $adjustment->name }} ({{ $adjustment->type === 'plus' ? '+' : '-' }} PKR {{ number_format($adjustment->amount, 2) }})
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    @endif
+
     @if ($rent->bill)
         <div class="card mt-4">
             <div class="card-header">

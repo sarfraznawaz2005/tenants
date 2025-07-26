@@ -79,6 +79,10 @@
                     @enderror
                 </div>
                 <div class="mb-3">
+                    <button type="button" class="btn btn-secondary mb-3" data-bs-toggle="modal" data-bs-target="#adjustmentModal">Add Adjustments</button>
+                    <div id="adjustments-container" class="mb-3">
+                        <!-- Adjustments will be listed here -->
+                    </div>
                     <label class="form-label">Status</label>
                     <div class="form-check @error('status') is-invalid @enderror">
                         <input class="form-check-input" type="radio" name="status" id="paid" value="paid" {{ old('status', 'paid') == 'paid' ? 'checked' : '' }}>
@@ -103,19 +107,75 @@
             </form>
         </div>
     </div>
+
+    <!-- Adjustment Modal -->
+    <div class="modal fade" id="adjustmentModal" tabindex="-1" aria-labelledby="adjustmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="adjustmentModalLabel">Add Adjustment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="adjustment_name" class="form-label">Adjustment Name</label>
+                        <input type="text" class="form-control" id="adjustment_name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Type</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="adjustment_type" id="adjustment_type_plus" value="plus" checked>
+                            <label class="form-check-label" for="adjustment_type_plus">Plus</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="adjustment_type" id="adjustment_type_minus" value="minus">
+                            <label class="form-check-label" for="adjustment_type_minus">Minus</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="adjustment_amount" class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="adjustment_amount" step="0.01">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="add_adjustment_btn">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
     <script>
-        flatpickr("#date", {
-            dateFormat: "Y-m-d",
-        });
+        let adjustments = [];
 
-        flatpickr("#due_date", {
-            dateFormat: "Y-m-d",
-        });
+        function renderAdjustments() {
+            const container = $('#adjustments-container');
+            container.empty();
+            adjustments.forEach((adj, index) => {
+                const adjustmentHtml = `
+                    <div class="d-flex justify-content-between align-items-center border p-2 mb-2">
+                        <span>${adj.name} (${adj.type === 'plus' ? '+' : '-'} PKR ${adj.amount})</span>
+                        <button type="button" class="btn btn-danger btn-sm remove-adjustment" data-index="${index}">Remove</button>
+                        <input type="hidden" name="adjustments[${index}][name]" value="${adj.name}">
+                        <input type="hidden" name="adjustments[${index}][type]" value="${adj.type}">
+                        <input type="hidden" name="adjustments[${index}][amount]" value="${adj.amount}">
+                    </div>
+                `;
+                container.append(adjustmentHtml);
+            });
+        }
 
         $(document).ready(function() {
+            flatpickr("#date", {
+                dateFormat: "Y-m-d",
+            });
+
+            flatpickr("#due_date", {
+                dateFormat: "Y-m-d",
+            });
+
             $('#tenant_id').on('change', function() {
                 const rent = $(this).find(':selected').data('rent');
                 $('#amount_due').val(rent);
@@ -143,6 +203,30 @@
                 $('#modal-image').attr('src', $(this).attr('src'));
                 const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
                 imageModal.show();
+            });
+
+            // Adjustment Modal Logic
+            $('#add_adjustment_btn').on('click', function() {
+                const name = $('#adjustment_name').val();
+                const type = $('input[name="adjustment_type"]:checked').val();
+                const amount = parseFloat($('#adjustment_amount').val());
+
+                if (name && !isNaN(amount) && amount > 0) {
+                    adjustments.push({ name, type, amount });
+                    renderAdjustments();
+                    $('#adjustmentModal').modal('hide');
+                    $('#adjustment_name').val('');
+                    $('#adjustment_amount').val('');
+                    $('#adjustment_type_plus').prop('checked', true);
+                } else {
+                    alert('Please enter a valid name and amount for the adjustment.');
+                }
+            });
+
+            $('#adjustments-container').on('click', '.remove-adjustment', function() {
+                const index = $(this).data('index');
+                adjustments.splice(index, 1);
+                renderAdjustments();
             });
         });
     </script>
