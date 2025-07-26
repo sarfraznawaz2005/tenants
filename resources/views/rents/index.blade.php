@@ -8,6 +8,7 @@
         <table id="rents-table" class="table table-striped table-sm">
             <thead>
             <tr>
+                <th>ID</th>
                 <th>Tenant</th>
                 <th>Amount Due</th>
                 <th>Amount Received</th>
@@ -22,6 +23,7 @@
             <tbody>
             @foreach ($rents as $rent)
                 <tr>
+                    <td>{{ $rent->id }}</td>
                     <td>{{ $rent->tenant->name }}</td>
                     <td>PKR {{ number_format($rent->amount_due, 2) }}</td>
                     <td>PKR {{ number_format($rent->amount_received, 2) }}</td>
@@ -60,7 +62,9 @@
 @push('scripts')
     <script>
         $(document).ready(function () {
-            $('#rents-table').DataTable();
+            $('#rents-table').DataTable({
+                "order": [[ 0, "desc" ]]
+            });
         });
     </script>
 @endpush
