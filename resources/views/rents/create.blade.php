@@ -52,7 +52,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="amount_due" class="form-label">Amount Due</label>
-                    <input type="number" class="form-control @error('amount_due') is-invalid @enderror" id="amount_due" name="amount_due" value="{{ old('amount_due') }}" readonly>
+                    <input type="number" class="form-control @error('amount_due') is-invalid @enderror" id="amount_due" name="amount_due" value="{{ old('amount_due') }}">
                     @error('amount_due')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

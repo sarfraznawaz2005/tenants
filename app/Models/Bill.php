@@ -15,4 +15,9 @@ class Bill extends Model
     {
         return $this->belongsTo(BillType::class);
     }
+
+    public function rent()
+    {
+        return $this->hasOne(Rent::class);
+    }
 }

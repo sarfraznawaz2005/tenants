@@ -73,14 +73,23 @@ class BillController extends Controller
 
         $path = $bill->picture;
         if ($request->hasFile('picture')) {
+            // Delete the old image
             if ($path) {
                 Storage::disk('public')->delete($path);
             }
+
             $billType = BillType::find($request->bill_type_id);
             $date = \Carbon\Carbon::parse($request->date);
             $extension = $request->file('picture')->getClientOriginalExtension();
             $fileName = Str::slug($billType->name) . '-' . strtolower($date->format('F-Y')) . '.' . $extension;
-            $path = $request->file('picture')->storeAs('bills', $fileName, 'public');
+
+            // Check if the bill is associated with a rent
+            if ($bill->rent) {
+                $tenantNameSlug = Str::slug($bill->rent->tenant->name);
+                $path = $request->file('picture')->storeAs('bills/' . $tenantNameSlug, $fileName, 'public');
+            } else {
+                $path = $request->file('picture')->storeAs('bills', $fileName, 'public');
+            }
         }
 
         $bill->update([
