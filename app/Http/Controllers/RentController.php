@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
 use App\Models\Rent;
 use App\Models\Tenant;
-use App\Models\Bill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class RentController extends Controller
 {
@@ -42,6 +43,22 @@ class RentController extends Controller
         $rent = new Rent($request->all());
         $rent->amount_remaining = $rent->amount_due - $rent->amount_received;
         $rent->save();
+
+        if ($request->filled('bill_id')) {
+            $bill = Bill::find($request->bill_id);
+            if ($bill && $bill->picture) {
+                $tenant = Tenant::find($request->tenant_id);
+                $tenantNameSlug = Str::slug($tenant->name);
+                $originalPath = $bill->picture;
+                $fileName = basename($originalPath);
+                $newPath = 'bills/' . $tenantNameSlug . '/' . $fileName;
+
+                if ($originalPath !== $newPath && Storage::disk('public')->exists($originalPath)) {
+                    Storage::disk('public')->move($originalPath, $newPath);
+                    $bill->update(['picture' => $newPath]);
+                }
+            }
+        }
 
         if ($request->has('adjustments')) {
             foreach ($request->input('adjustments') as $adjustmentData) {
@@ -82,6 +99,41 @@ class RentController extends Controller
             'adjustments.*.type' => 'nullable|in:plus,minus',
             'adjustments.*.amount' => 'nullable|numeric|min:0',
         ]);
+
+        $originalBillId = $rent->bill_id;
+        $newBillId = $request->input('bill_id');
+
+        // Handle disassociation of the old bill
+        if ($originalBillId && $originalBillId != $newBillId) {
+            $oldBill = Bill::find($originalBillId);
+            if ($oldBill && $oldBill->picture) {
+                $oldPath = $oldBill->picture;
+                $fileName = basename($oldPath);
+                $newPathForOldBill = 'bills/' . $fileName;
+
+                if (dirname($oldPath) !== 'bills' && Storage::disk('public')->exists($oldPath)) {
+                    Storage::disk('public')->move($oldPath, $newPathForOldBill);
+                    $oldBill->update(['picture' => $newPathForOldBill]);
+                }
+            }
+        }
+
+        // Handle association of the new bill
+        if ($newBillId) {
+            $newBill = Bill::find($newBillId);
+            if ($newBill && $newBill->picture) {
+                $tenant = Tenant::find($request->tenant_id);
+                $tenantNameSlug = Str::slug($tenant->name);
+                $originalPath = $newBill->picture;
+                $fileName = basename($originalPath);
+                $newPathForNewBill = 'bills/' . $tenantNameSlug . '/' . $fileName;
+
+                if ($originalPath !== $newPathForNewBill && Storage::disk('public')->exists($originalPath)) {
+                    Storage::disk('public')->move($originalPath, $newPathForNewBill);
+                    $newBill->update(['picture' => $newPathForNewBill]);
+                }
+            }
+        }
 
         $rent->fill($request->all());
         $rent->amount_remaining = $rent->amount_due - $rent->amount_received;
