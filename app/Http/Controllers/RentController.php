@@ -129,11 +129,15 @@ class RentController extends Controller
             $imageData = $request->input('image');
             $imageData = str_replace('data:image/png;base64,', '', $imageData);
             $imageData = str_replace(' ', '+', $imageData);
-            $imageName = 'invoice-' . $rent->id . '-' . time() . '.png';
+            $rentMonthYear = \Carbon\Carbon::parse($rent->date)->format('F Y');
+            $imageName = \Illuminate\Support\Str::slug('Rent for ' . $rentMonthYear) . '.png';
+            $tenantName = \Illuminate\Support\Str::slug($rent->tenant->name);
 
-            Storage::disk('public')->put('invoices/' . $imageName, base64_decode($imageData));
+            $path = 'invoices/' . $tenantName . '/' . $imageName;
 
-            return response()->json(['success' => true, 'imageUrl' => Storage::disk('public')->url('invoices/' . $imageName)]);
+            Storage::disk('public')->put($path, base64_decode($imageData));
+
+            return response()->json(['success' => true, 'imageUrl' => Storage::disk('public')->url($path)]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }

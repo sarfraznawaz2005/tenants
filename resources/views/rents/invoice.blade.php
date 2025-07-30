@@ -223,6 +223,43 @@
                     }, 'image/png');
                 });
             });
+
+            document.getElementById('saveInvoice').addEventListener('click', function() {
+                const saveButton = this;
+                saveButton.disabled = true;
+                saveButton.textContent = 'Saving...';
+
+                console.log('Save Invoice button clicked.');
+                html2canvas(invoiceBox).then(function(canvas) {
+                    const imageData = canvas.toDataURL('image/png');
+                    fetch('/rents/{{ $rent->id }}/save-invoice-image', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: JSON.stringify({ image: imageData })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Invoice saved successfully!');
+                            console.log('Invoice saved:', data.imageUrl);
+                        } else {
+                            alert('Failed to save invoice.');
+                            console.error('Error saving invoice:', data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while saving the invoice.');
+                    })
+                    .finally(() => {
+                        saveButton.disabled = false;
+                        saveButton.textContent = 'Save Invoice';
+                    });
+                });
+            });
         });
     </script>
     <div style="text-align: center; margin-top: 20px;">
