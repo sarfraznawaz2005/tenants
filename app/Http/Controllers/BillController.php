@@ -6,6 +6,7 @@ use App\Models\Bill;
 use App\Models\BillType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BillController extends Controller
 {
@@ -38,7 +39,11 @@ class BillController extends Controller
 
         $path = null;
         if ($request->hasFile('picture')) {
-            $path = $request->file('picture')->store('bills', 'public');
+            $billType = BillType::find($request->bill_type_id);
+            $date = \Carbon\Carbon::parse($request->date);
+            $extension = $request->file('picture')->getClientOriginalExtension();
+            $fileName = Str::slug($billType->name) . '-' . strtolower($date->format('F-Y')) . '.' . $extension;
+            $path = $request->file('picture')->storeAs('bills', $fileName, 'public');
         }
 
         Bill::create([
@@ -71,7 +76,11 @@ class BillController extends Controller
             if ($path) {
                 Storage::disk('public')->delete($path);
             }
-            $path = $request->file('picture')->store('bills', 'public');
+            $billType = BillType::find($request->bill_type_id);
+            $date = \Carbon\Carbon::parse($request->date);
+            $extension = $request->file('picture')->getClientOriginalExtension();
+            $fileName = Str::slug($billType->name) . '-' . strtolower($date->format('F-Y')) . '.' . $extension;
+            $path = $request->file('picture')->storeAs('bills', $fileName, 'public');
         }
 
         $bill->update([
