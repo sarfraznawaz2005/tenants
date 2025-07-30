@@ -36,16 +36,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-                <div class="mb-3">
-                    <label for="picture">Bill Picture</label>
-                    <input type="file" name="picture" id="picture" class="form-control-file @error('picture') is-invalid @enderror">
-                    @error('picture')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                    @if($bill->picture)
-                        <img src="{{ asset('storage/' . $bill->picture) }}" alt="Bill Picture" width="100" class="mt-2">
-                    @endif
-                </div>
+                <x-image-upload :value="$bill->picture" />
                 <button type="submit" class="btn btn-primary">Update Bill</button>
             </form>
         </div>

@@ -138,13 +138,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3">
-                            <label for="picture">Bill Picture</label>
-                            <input type="file" name="picture" id="picture" class="form-control-file @error('picture') is-invalid @enderror">
-                            @error('picture')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        <x-image-upload />
                         <button type="submit" class="btn btn-primary">Add Bill</button>
                     </form>
                 </div>
