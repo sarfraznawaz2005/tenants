@@ -198,7 +198,7 @@
         </table>
     </div>
 
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="{{asset('js/html2canvas.min.js')}}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM Content Loaded.');
