@@ -1,0 +1,39 @@
+{
+    "_comment": "https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/configuration.md",
+    "selectedAuthType": "oauth-personal",
+    "theme": "Default",
+    "contextFileName": "GEMINI.md",
+    "autoAccept": false,
+    "bugCommand": {
+        "urlTemplate": "https://kanboard.tslic-backoffice.com/?controller=TaskViewController&action=show&task_id={info}"
+    },
+    "fileFiltering": {
+        "respectGitIgnore": true,
+        "enableRecursiveFileSearch": true
+    },
+    "mcpServers": {
+        "context7": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@upstash/context7-mcp"
+            ]
+        },
+        "sequential-thinking": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-sequential-thinking"
+            ]
+        }
+    },
+    "checkpointing": {
+        "enabled": true
+    },
+    "preferredEditor": "jetbrains",
+    "telemetry": {
+        "enabled": false
+    },
+    "usageStatisticsEnabled": false,
+    "hideTips": false
+}
