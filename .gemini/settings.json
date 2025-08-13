@@ -12,12 +12,9 @@
         "enableRecursiveFileSearch": true
     },
     "mcpServers": {
-        "context7": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@upstash/context7-mcp"
-            ]
+        "laravel-boost": {
+            "command": "php",
+            "args": ["./artisan", "boost:mcp"]
         },
         "sequential-thinking": {
             "command": "npx",

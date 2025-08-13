@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "php",
+            "args": [
+                "D:\\laragon\\www\\tenants\\artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}
