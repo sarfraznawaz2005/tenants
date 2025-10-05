@@ -107,7 +107,7 @@
                 <table>
                     <tr>
                         <td>
-                            Name: {{ $rent->tenant->name }}<br>
+                            Name: {{ $rent->tenant->name }} ({{ $rent->tenant->cnic }})
                         </td>
                     </tr>
                 </table>
